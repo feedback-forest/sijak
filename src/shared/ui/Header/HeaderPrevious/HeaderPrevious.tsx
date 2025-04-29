@@ -7,7 +7,7 @@ import Image from "next/image";
 const HeaderPrevious = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const url = pathname.split("/")[1];
+  const url = pathname.split("/")[2];
 
   const isRenderMobileArrow = () => {
     if (

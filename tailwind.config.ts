@@ -18,6 +18,7 @@ const config: Config = {
         notoSansKr: ["var(--noto-sans-kr)"],
         roboto: ["var(--roboto)"],
         pretendard: ["var(--font-pretendard"],
+        // freesentation: ["var(--font-freesentation"],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -47,6 +48,8 @@ const config: Config = {
           textDescriptionGrayColor: "#A3A3A3",
           textTitleGrayColor: "#797979",
           textFooterColor: "#717171",
+          textTypingGrayColor: "#8e8e8e",
+          textTypingGreenColor: "#268A30",
           correct: "#4CAF50",
           error: "#D32F2F",
           disabled: "#D4D4D4",

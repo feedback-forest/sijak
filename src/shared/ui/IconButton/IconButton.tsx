@@ -1,3 +1,4 @@
+import { cn } from "@/shared/lib/utils";
 import { Button } from "../Button";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
@@ -12,6 +13,7 @@ interface IconButtonProps {
   iconHeight: number;
   loading?: boolean;
   className?: string;
+  imgClassName?: string;
 }
 
 const IconButton = ({
@@ -24,6 +26,7 @@ const IconButton = ({
   iconHeight,
   loading,
   className,
+  imgClassName,
 }: IconButtonProps) => {
   return (
     <Button
@@ -32,13 +35,19 @@ const IconButton = ({
       disabled={loading}
       className={twMerge(
         "flex flex-col items-center justify-center content-center w-[32px] h-[32px] hover:bg-gray-200 hover:bg-transparent",
-        `w-[${buttonWidth}px], h-[${buttonHeight}px]`,
+        `w-[${buttonWidth}px] h-[${buttonHeight}px]`,
         className,
       )}
       onClick={handleClick}
     >
       {!loading && (
-        <Image src={src} alt={alt} width={iconWidth} height={iconHeight} />
+        <Image
+          src={src}
+          alt={alt}
+          width={iconWidth}
+          height={iconHeight}
+          className={cn(imgClassName)}
+        />
       )}
     </Button>
   );

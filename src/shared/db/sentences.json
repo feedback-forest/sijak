@@ -1,0 +1,34 @@
+{
+  "phrase": [
+    {
+      "id": 16,
+      "sentence": "길이 보이지 않을 때, 새벽이 오듯 기회도 찾아온다. 오늘 내딛은 작은 걸음이 내일을 밝히는 빛이된다. 어둠이 깊어질수록 새벽은 가까워진다.",
+      "title": "새벽의 빛처럼",
+      "author": "이지희",
+      "nickname": "leejh",
+      "lang": "ko",
+      "types": "quote",
+      "user_id": 61
+    },
+    {
+      "id": 38,
+      "sentence": "우리는 선택받은 아이들",
+      "title": "디지몬",
+      "author": "김용범",
+      "nickname": "dt10002",
+      "lang": "ko",
+      "types": "quote",
+      "user_id": 13
+    },
+    {
+      "id": 39,
+      "sentence": "우리는 선택받은 아이들",
+      "title": "디지몬",
+      "author": "김용범",
+      "nickname": "dt10002",
+      "lang": "ko",
+      "types": "quote",
+      "user_id": 13
+    }
+  ]
+}

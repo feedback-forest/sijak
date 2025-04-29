@@ -1,10 +1,15 @@
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/shared/lib/utils";
 
 interface DividerProps {
+  isDashed?: boolean;
   className?: string;
 }
-const Divider = ({ className }: DividerProps) => {
-  return <hr className={twMerge("divide-solid", className)}></hr>;
+const Divider = ({ isDashed, className }: DividerProps) => {
+  return (
+    <hr
+      className={cn("divide-solid", className, isDashed && "border-dashed")}
+    ></hr>
+  );
 };
 
 export default Divider;

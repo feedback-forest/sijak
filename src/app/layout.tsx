@@ -1,12 +1,7 @@
 import "./globals.css";
 
-import { Footer, Header, ToastToaster, Toaster } from "@/shared/ui";
-import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
-
-import { Analytics } from "@vercel/analytics/react";
-import Head from "next/head";
+import { Header } from "@/shared/ui";
 import type { Metadata } from "next";
-import Providers from "@/features/provider/Provider";
 import Script from "next/script";
 import localFont from "next/font/local";
 
@@ -18,13 +13,13 @@ const pretendard = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "시작 : 50+ 시ː니어를 위한 문화생활 사이트",
-  description: "주변의 기회를 찾다, 시니어를 위한 맞춤형 프로그램",
+  title: "시작 : 재밌는 모든 것의 시작",
+  description: "재밌는 무언가를 찾고 계시다면 시작에서 시작",
   keywords:
-    "송파, 마포, 노원, 강서, 내 주변 문화생활 클래스, 시작 Pick 클래스, 찜, 좋아요, 문화센터, 신청 가능한 클래스, 원데이 클래스, 정기 클래스, 전체 클래스, 문화센터 프로그램, 지자체, 시니어, 인기 문화 강좌, 4050, 5060",
+    "시작, 송파, 마포, 노원, 강서, 내 주변 문화생활 클래스, 시작 Pick 클래스, 찜, 좋아요, 문화센터, 신청 가능한 클래스, 원데이 클래스, 정기 클래스, 전체 클래스, 문화센터 프로그램, 지자체, 시니어, 인기 문화 강좌, 4050, 5060",
   openGraph: {
     title: "시작",
-    description: "주변의 기회를 찾다, 시니어를 위한 맞춤형 프로그램",
+    description: "재밌는 무언가를 찾고 계시다면 시작에서 시작",
     url: "https://sijak.app",
     images: [
       {
@@ -45,7 +40,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default function SijakRootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -66,33 +61,17 @@ export default function RootLayout({
         />
       </head>
       <body className={`${pretendard.className} flex flex-col w-full h-full`}>
-        <Providers>
-          <main className="flex w-full h-full flex-1">
-            <div className="flex flex-col w-full h-full justify-start items-start relative">
-              <div className="flex flex-col w-full h-full justify-start items-start relative max-w-[1440px] mx-auto my-0">
-                <Header />
-                <div className="flex flex-col w-full h-full justify-start items-start desktop:pt-[70px] tablet:pt-[70px] mobile:pt-12">
-                  {children}
-                </div>
+        <main className="flex w-full h-full flex-1">
+          <div className="flex flex-col w-full h-full justify-start items-start relative">
+            <div className="flex flex-col w-full h-full justify-start items-start relative max-w-[1440px] mx-auto my-0">
+              <Header />
+              <div className="flex flex-col w-full h-full justify-start items-start">
+                {children}
               </div>
             </div>
-          </main>
-          <Footer />
-          <Toaster />
-          <ToastToaster />
-        </Providers>
+          </div>
+        </main>
       </body>
-      {process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_GTM_ID && (
-        <GoogleTagManager
-          gtmId={process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_GTM_ID}
-        />
-      )}
-      {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_GA_ID && (
-        <GoogleAnalytics
-          gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_GA_ID}
-        />
-      )}
-      {process.env.NEXT_PUBLIC_VERCEL_ENV === "preview" && <Analytics />}
     </html>
   );
 }

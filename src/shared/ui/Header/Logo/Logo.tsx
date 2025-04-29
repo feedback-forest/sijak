@@ -10,7 +10,6 @@ const Logo = () => {
   const pathname = usePathname();
 
   const url = pathname.split("/")[1];
-
   const [isVisible, setIsVisible] = useState(true);
 
   const handleLogoClick = () => {
