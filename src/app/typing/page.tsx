@@ -11,89 +11,105 @@ import useGetTypingList from "@/features/typing/api/useGetTypingList";
 import FloatingBtnGroup from "@/features/typing/ui/FloatingBtnGroup/FloatingBtnGroup";
 import { Journey } from "@/features/typing/ui/Journey/Journey";
 import PostTitle from "@/features/typing/ui/PostTitle/PostTitle";
-import { Title } from "@/features/typing/ui/Title/Title";
 // import { isMacOS } from "@/shared/hooks/userAgent.server";
-import { getRandomPhrase, getRandomWords } from "@/shared/hooks/words";
+import { getRandomPhrase } from "@/shared/hooks/words";
 import usePhraseStore from "@/shared/store/phrase";
-import useLoginedUserStore from "@/shared/store/user";
+import useTypingStore from "@/shared/store/typing";
+import useTypingPercent from "@/shared/store/typingPercent";
+import useTypingLoginedUserStore from "@/shared/store/typingUser";
 import { Divider, Progress } from "@/shared/ui";
 import { useEffect } from "react";
-
-// const generateShortTexts = ({
-//   roundCount,
-//   wordCount,
-// }: {
-//   roundCount: number;
-//   wordCount: number;
-// }) => {
-//   const shortTexts = [];
-
-//   for (let i = 0; i < roundCount; i++) {
-//     shortTexts.push(getRandomWords(wordCount).join(" "));
-//   }
-
-//   return shortTexts;
-// };
+import { ClipLoader } from "react-spinners";
 
 const TypingHome = () => {
-  // const quotes = generateShortTexts({
-  //   roundCount: 5,
-  //   wordCount: 10,
-  // });
-
   // TODO: 유저 정보 확인 API
-  // const { loginedUser: loginedUserState, setLoginedUser: setLoginedUserStore } =
-  //   useLoginedUserStore();
-
-  // const { loginedUser, setLoginedUser } = useLoginedUserStore();
-
-  // FIXME: typing 유저 정보로 수정
-
-  // const { data: loginUserData, isSuccess: isLoginUserSuccess } =
-  //   useGetLoginUserInfo(loginedUser ? loginedUser.nickname : "");
-
-  // TODO: 문장 랜덤 불러오기 API
-  const randomPhrase = getRandomPhrase();
-  // console.log(randomPhrase);
-  // const { data: typingList, isSuccess: isTypingListSuccess } = useGetTypingList();
-
-  // TODO: 문장 20개 recoil에 전역 상태관리
-  const { phraseInfo, setPhraseInfo } = usePhraseStore();
+  const { typingLoginedUser } = useTypingLoginedUserStore();
 
   useEffect(() => {
-    // if (isTypingListSuccess) {
-    //  setPhraseInfo(typingList.data.phrase);
-    if (randomPhrase) {
-      setPhraseInfo(0, randomPhrase);
+    console.log("✅ 로그인 유저 상태:", typingLoginedUser);
+  }, [typingLoginedUser]);
+
+  const {
+    data: typingList,
+    isLoading,
+    isSuccess: isTypingListSuccess,
+  } = useGetTypingList();
+  const typingListData = typingList?.data.phrases;
+  console.log("typingListData", typingListData);
+
+  const { phraseInfo, setPhraseInfo } = usePhraseStore();
+
+  const { typingPercent } = useTypingPercent();
+  useEffect(() => {
+    if (typingListData && phraseInfo) {
+      console.log("1234", typingListData);
+      setPhraseInfo(phraseInfo.phraseIndex, typingListData);
     }
-    // }
-  }, [randomPhrase]);
+  }, [typingListData]);
 
   useEffect(() => {
     console.log(phraseInfo);
   }, [phraseInfo]);
+
+  useEffect(() => {
+    console.log("percent@@@@@@:", typingPercent?.percent);
+  }, [typingPercent?.percent]);
+
   // TODO: 다음 버튼 클릭 시 recoil 다음 문장 상태 가져오기
 
   // TODO: 경계값 1번째 글, 마지막 글 alert
 
   // TODO: 타이핑 문장 1개만 보이게 수정
 
+  if (!phraseInfo || !phraseInfo.phrase) {
+    return null;
+  }
+
   return (
-    phraseInfo &&
     phraseInfo.phrase && (
       <div className="flex w-full h-full min-h-[calc(100vh_-_68px)] flex-col p-4">
         <TotalRecordProvider>
           <TypingStatusProvider>
             <OptionsProvider>
-              <div className="flex flex-col gap-5">
-                <div className="flex flex-col gap-9">
-                  <Progress value={13} className="h-[1px]" />
-                  <Journey isMacOS={false} phrase={phraseInfo.phrase} />
+              <div className="flex h-full flex-col gap-5">
+                <div className="flex h-full flex-col gap-9">
+                  {typingPercent ? (
+                    <Progress
+                      value={typingPercent.percent}
+                      className="h-[1px]"
+                    />
+                  ) : (
+                    <Progress value={0} className="h-[1px]" />
+                  )}
+                  {isLoading && (
+                    <div className="flex w-full justify-center items-center">
+                      <ClipLoader color="#8D8D8D" size={24} />
+                    </div>
+                  )}
+                  {phraseInfo && phraseInfo.phrase && (
+                    <Journey
+                      phrase={phraseInfo.phrase}
+                      phraseIndex={phraseInfo.phraseIndex}
+                    />
+                  )}
                   <Divider className="border-[#8D8D8D] mt-[2px]" />
                 </div>
-                {/* <PostTitle title={"새벽의 빛처럼"} author={"이지희"} /> */}
+
+                <div className="flex w-full px-1">
+                  <PostTitle
+                    title={
+                      phraseInfo.phrase[phraseInfo.phraseIndex]
+                        ? phraseInfo.phrase[phraseInfo.phraseIndex].title
+                        : ""
+                    }
+                    author={
+                      phraseInfo.phrase[phraseInfo.phraseIndex]
+                        ? phraseInfo.phrase[phraseInfo.phraseIndex].author
+                        : ""
+                    }
+                  />
+                </div>
               </div>
-              <FloatingBtnGroup />
             </OptionsProvider>
           </TypingStatusProvider>
         </TotalRecordProvider>

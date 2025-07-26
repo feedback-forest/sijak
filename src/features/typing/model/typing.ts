@@ -7,7 +7,7 @@ export interface TypingInfo {
   writer: string;
   cpm: number;
   wpm: number;
-  max_wpm: number;
+  maxCpm: number;
   acc: number;
   time: string;
 }
@@ -23,8 +23,13 @@ export interface Sentences {
   user_id: number;
 }
 
-export interface GetSentencesInfo {
+export interface Phrase {
+  phraseIndex: number;
   phrase: Sentences[];
+}
+
+export interface GetSentencesInfo {
+  phrases: Sentences[];
 }
 
 export interface GetSentences {
@@ -34,10 +39,10 @@ export interface GetSentences {
 }
 
 export interface Typing {
-  id: number;
+  phraseId: number;
   cpm: number;
+  maxCpm: number;
   wpm: number;
-  max_wpm: number;
   acc: number;
 }
 
@@ -46,9 +51,15 @@ export interface SaveTypingDto {
   typing: Typing;
 }
 
-export interface SaveTypingResData {
+export interface SaveTypingInfo {
   rank: number;
-  lucky_message: string;
+  luckyMessage: string;
+  role: "GUEST" | "USER";
+  nickname: string;
+}
+
+export interface SaveTypingResData {
+  typing: SaveTypingInfo;
 }
 
 export interface SaveTypingRes {
@@ -57,9 +68,8 @@ export interface SaveTypingRes {
   data: SaveTypingResData;
 }
 
-export type SaveTyping = Payload<
-  undefined,
-  undefined,
-  SaveTypingDto,
-  SaveTypingRes
->;
+export type SaveTyping = Payload<undefined, undefined, Typing, SaveTypingRes>;
+
+export interface TypingPercent {
+  percent: number;
+}

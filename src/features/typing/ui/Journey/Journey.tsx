@@ -7,31 +7,29 @@ import { TypeSlots } from "../TypeSlots/TypeSlots";
 import { Sentences } from "../../model/typing";
 
 const Step = {
-  결과: 1,
-  타이핑: 0,
+  result: 1,
+  typing: 0,
 } as const;
 
 type Step = (typeof Step)[keyof typeof Step];
 
 export const Journey = ({
   phrase,
-  isMacOS,
+  phraseIndex,
 }: {
   phrase: Sentences[];
-  isMacOS: boolean;
+  phraseIndex: number;
 }) => {
-  const [step, setStep] = useState<Step>(Step.타이핑);
+  const [step, setStep] = useState<Step>(Step.typing);
+
+  console.log("phrase", phrase);
 
   return (
     <>
-      {step === Step.타이핑 && (
-        <TypeSlots
-          isMacOS={isMacOS}
-          phrase={phrase}
-          onComplete={() => setStep(Step.결과)}
-        />
+      {step === Step.typing && (
+        <TypeSlots phrase={phrase} phraseIndex={phraseIndex} />
       )}
-      {step === Step.결과 && <Result onRetry={() => setStep(Step.타이핑)} />}
+      {step === Step.result && <Result onRetry={() => setStep(Step.typing)} />}
     </>
   );
 };

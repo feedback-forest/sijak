@@ -1,23 +1,22 @@
 export interface Ranking {
   member_id: number;
-  rank: number;
+  ranking: number;
   nickname: string;
   score: number;
 }
 
 export interface GetRealtimeRankingRes {
-  ranking: Ranking[];
+  rankings: Ranking[];
 }
 
 export interface GetRealtimeRanking {
   code: number;
   message: string;
-  // GetRealtimeRankingRes
-  data: Ranking[];
+  data: GetRealtimeRankingRes;
 }
 
 export interface GetMonthlyRankingRes {
-  ranking: Ranking[];
+  rankings: Ranking[];
 }
 
 export interface GetMonthlyRanking {

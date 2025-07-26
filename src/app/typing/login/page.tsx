@@ -1,18 +1,25 @@
 "use client";
 
+import useKakaoTempToken from "@/features/typing/api/useKakaoLogin";
 import { Button, LinkArrowLeft, UnifiedTooltip } from "@/shared/ui";
 
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 
 const LoginPage = () => {
   // TODO: 로그인 로직 수정 | 용범님과 대화 필요
-  const REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
-  const REDIRECT_URI = process.env.NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI;
+  const REST_API_KEY = process.env.NEXT_PUBLIC_TYPING_KAKAO_REST_API_KEY;
+  const REDIRECT_URI = process.env.NEXT_PUBLIC_TYPING_KAKAO_LOGIN_REDIRECT_URI;
   // TODO: 카카오 회원가입 설정 변경
-  const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  // const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  const link = `${process.env.NEXT_PUBLIC_API_ENDPOINT}/oauth2/authorization/kakao`;
+
+  const router = useRouter();
+  const pathname = usePathname();
 
   const linkToKakaoLogin = () => {
     window.location.href = link;
+    console.log(pathname);
     // TODO: 로그인 및 회원가입 api 호출
   };
 

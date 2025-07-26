@@ -1,13 +1,41 @@
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { TbCrown, TbLogin2 } from "react-icons/tb";
+import { TbCrown, TbLogin2, TbUser } from "react-icons/tb";
 import { Divider } from "../../Divider";
 import { cn } from "@/shared/lib/utils";
+import useTypingLoginedUserStore from "@/shared/store/typingUser";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../../DropdownMenu/DropdownMenu";
+import { useToast } from "@/shared/hooks/useToast";
 
 const TypingHeader = () => {
   const pathname = usePathname();
   const router = useRouter();
   const url = pathname.split("/")[2];
+
+  const { typingLoginedUser } = useTypingLoginedUserStore();
+  const { setTypingLoginedUser } = useTypingLoginedUserStore();
+
+  const { toast } = useToast();
+
+  const handleLogout = () => {
+    setTypingLoginedUser({
+      accessToken: "",
+      refreshToken: "",
+    });
+
+    toast({
+      title: "로그아웃되었습니다.",
+    });
+
+    router.push("/typing");
+  };
 
   const isRenderHeader = () => {
     if (url === "login") return false;
@@ -23,8 +51,13 @@ const TypingHeader = () => {
 
   const isRenderLogin = () => {
     if (url === "signup") return false;
+    if (typingLoginedUser && typingLoginedUser.accessToken) return false;
     // TODO: 유저 전역 객체에 토큰이 있으면 유저 아이콘으로 변경
     return true;
+  };
+
+  const isRenderUserIcon = () => {
+    if (typingLoginedUser && typingLoginedUser.accessToken) return true;
   };
 
   const backToPreviousPage = () => {
@@ -65,14 +98,30 @@ const TypingHeader = () => {
           </div>
         )}
         <div className="text-lg font-black">{renderTitle()}</div>
-        {isRenderLogin() ? (
+        {isRenderLogin() && (
           <div className="w-6">
             <div onClick={() => router.push("/typing/login")}>
               <TbLogin2 size={24} />
             </div>
           </div>
-        ) : (
-          <div className="w-6"></div>
+        )}
+        {isRenderUserIcon() && (
+          <div className="w-6">
+            <div>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <TbUser size={24} />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  {/* <DropdownMenuLabel>반가워요</DropdownMenuLabel> */}
+                  {/* <DropdownMenuSeparator /> */}
+                  <DropdownMenuItem onClick={handleLogout}>
+                    로그아웃
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
         )}
       </header>
     )

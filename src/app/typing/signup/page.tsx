@@ -31,6 +31,10 @@ import { userAgeList } from "@/entities/user/model/user";
 import { twMerge } from "tailwind-merge";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import useGetTypingRandomNickname from "@/features/typing/api/useGetTypingRandomNickname";
+import useTypingValidateNickname from "@/features/typing/api/useTypingValidateNickname";
+import usePostSignUp from "@/features/typing/api/usePostSignUp";
+import useTempTokenStore from "@/shared/store/tempToken";
 
 type SignUpForm = {
   nickname: string;
@@ -57,19 +61,19 @@ const agreeItems = [
   { id: "allAgree", label: "약관 전체 동의", externalLink: "" },
   {
     id: "serviceAgree",
-    label: "[필수] 서비스 이용 약관",
+    label: "[필수] 서비스 이용 약관 동의",
     externalLink:
-      "https://www.notion.so/b942a4f9070442b7891cb136037ffa74?pvs=4",
+      "https://www.notion.so/19a47a6ecf8880bcbba9c000f6f9bc17?source=copy_link",
   },
   {
     id: "personalInformationAgree",
-    label: "[필수] 개인정보 처리방침",
+    label: "[필수] 개인정보 처리방침 동의",
     externalLink:
-      "https://www.notion.so/6d012c4a80f845eca3d98defc11d6d86?pvs=4",
+      "https://www.notion.so/21947a6ecf8880e586a1f35ca18561a3?source=copy_link",
   },
   {
     id: "marketingAgree",
-    label: "[선택] 시작의 광고와 마케팅 메시지를 카카오톡으로 받습니다",
+    label: "[선택] 마케팅 정보 수신 동의",
     externalLink: "",
   },
 ] as const;
@@ -104,6 +108,7 @@ const SignUpPage = () => {
   const [message, setMessage] = useState<string>("");
 
   const { loginedUser } = useLoginedUserStore();
+  const { tempToken } = useTempTokenStore();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -114,9 +119,11 @@ const SignUpPage = () => {
 
   const router = useRouter();
 
-  const getRandomNickname = useGetRandomNickname();
-  const validateNickname = useValidateNickname();
-  const postNickname = usePostNickname();
+  const getRandomNickname = useGetTypingRandomNickname();
+  const validateNickname = useTypingValidateNickname();
+  const postSignUp = usePostSignUp(tempToken ?? "");
+  // const postNickname = usePostNickname();
+
   const { toast } = useToast();
 
   const makeRandomNickname = () => {
@@ -135,7 +142,7 @@ const SignUpPage = () => {
         {
           onSuccess: (data) => {
             const validateCheck = data.data;
-            if (validateCheck && validateCheck.status === 200) {
+            if (validateCheck && validateCheck.message === "success") {
               clearErrors("nickname"); // 유효성 검사 성공 시 에러 지우기
               setStatus("correct");
               setMessage("사용 가능한 닉네임입니다.");
@@ -169,16 +176,29 @@ const SignUpPage = () => {
   };
 
   const updateNickname: SubmitHandler<SignUpForm> = (data) => {
-    postNickname.mutate(
+    // postNickname.mutate(
+    //   {
+    //     nickname: data.nickname,
+    //     age_range: data.ageRange,
+    //     gender: data.gender,
+    //   },
+    //   {
+    //     onSuccess: () => {
+    //       toast({ title: "시ː작에 오신 걸 환영합니다." });
+    //       router.push("/");
+    //     },
+    //   },
+    // );
+    postSignUp.mutate(
       {
         nickname: data.nickname,
-        age_range: data.ageRange,
-        gender: data.gender,
+        agreements: ["TERMS_OF_SERVICE", "PRIVACY_POLICY"],
       },
       {
         onSuccess: () => {
-          toast({ title: "시ː작에 오신 걸 환영합니다." });
-          router.push("/");
+          // TODO: 회원가입 성공 후 반환되는 token 반환
+          toast({ title: "타자모어에 오신 걸 환영합니다." });
+          router.push("/typing");
         },
       },
     );
@@ -203,8 +223,8 @@ const SignUpPage = () => {
   const isError = form.formState.errors.agreeItems?.message;
   const isDisabled =
     !form.getValues("agreeItems").includes("serviceAgree") ||
-    !form.getValues("agreeItems").includes("personalInformationAgree") ||
-    !form.getValues("agreeItems").includes("locationBasedServiceAgree");
+    !form.getValues("agreeItems").includes("personalInformationAgree");
+  // !form.getValues("agreeItems").includes("locationBasedServiceAgree");
 
   const handleAllAgreeChange = (checked: boolean) => {
     const allAgreeItems = checked ? agreeItems.map((item) => item.id) : [];
@@ -337,7 +357,7 @@ const SignUpPage = () => {
             </div>
           </div>
         </div>
-        <div className="absolute bottom-[84px] text-xs">
+        <div className="absolute bottom-[92px] text-xs text-center desktop:w-[400px] tablet:w-[312px] mobile:w-[339px]">
           부적절한 닉네임은 제한 될 수 있습니다.
         </div>
         <Button
@@ -345,11 +365,12 @@ const SignUpPage = () => {
           disabled={
             (!!errors.nickname && status !== "correct") ||
             status === "default" ||
-            !watch("ageRange") ||
-            !watch("gender")
+            isDisabled
+            // !watch("ageRange") ||
+            // !watch("gender")
           }
         >
-          <div className="desktop:text-xl tablet:text-base mobile:text-base text-center">
+          <div className="desktop:text-xl tablet:text-base mobile:text-base text-center desktop:w-[400px] tablet:w-[312px] mobile:w-[339px]">
             가입 완료
           </div>
         </Button>

@@ -12,7 +12,18 @@ export interface PhraseState {
 const initialState: PhraseState = {
   phraseInfo: {
     phraseIndex: 0,
-    phrase: [],
+    phrase: [
+      // {
+      //   id: 0,
+      //   sentence: "",
+      //   title: "",
+      //   author: "",
+      //   nickname: "",
+      //   lang: "",
+      //   types: "",
+      //   user_id: 0,
+      // },
+    ],
   },
   setPhraseInfo: () => {},
 };

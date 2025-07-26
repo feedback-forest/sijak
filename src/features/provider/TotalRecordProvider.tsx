@@ -5,12 +5,14 @@ import React, { useMemo, useState } from "react";
 export type TotalRecord = {
   wordsPerMinutes: number[];
   characterPerMinutes: number[];
+  maxCPMs: number[];
   accuracies: number[];
 };
 
 type RecordUpdateHandlerParameter = {
   wordsPerMinute: number;
   characterPerMinute: number;
+  maxCPM: number;
   accuracy: number;
 };
 
@@ -40,6 +42,7 @@ export const TotalRecordProvider = ({
   const [data, setData] = useState<TotalRecord>({
     accuracies: [],
     characterPerMinutes: [],
+    maxCPMs: [],
     wordsPerMinutes: [],
   });
 
@@ -50,19 +53,24 @@ export const TotalRecordProvider = ({
         setData({
           accuracies: [],
           characterPerMinutes: [],
+          maxCPMs: [],
           wordsPerMinutes: [],
         });
       },
       updateTotalRecord: ({
         wordsPerMinute,
         characterPerMinute,
+        maxCPM,
         accuracy,
       }: RecordUpdateHandlerParameter) => {
-        setData(({ accuracies, characterPerMinutes, wordsPerMinutes }) => ({
-          accuracies: [...accuracies, accuracy],
-          characterPerMinutes: [...characterPerMinutes, characterPerMinute],
-          wordsPerMinutes: [...wordsPerMinutes, wordsPerMinute],
-        }));
+        setData(
+          ({ accuracies, characterPerMinutes, maxCPMs, wordsPerMinutes }) => ({
+            accuracies: [...accuracies, accuracy],
+            characterPerMinutes: [...characterPerMinutes, characterPerMinute],
+            maxCPMs: [...maxCPMs, maxCPM],
+            wordsPerMinutes: [...wordsPerMinutes, wordsPerMinute],
+          }),
+        );
       },
     }),
     [data],

@@ -4,8 +4,9 @@ import { useDebouncedValue } from "@/shared/hooks/useDebouncedValue";
 import { useIsMounted } from "@/shared/hooks/useIsMounted";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { ResetButton } from "../ResetButton/ResetButton";
+import usePhraseStore from "@/shared/store/phrase";
 
 export const Result = ({ onRetry }: { onRetry: () => void }) => {
   const isMounted = useIsMounted();

@@ -2,10 +2,10 @@ import { useMutation } from "@tanstack/react-query";
 import { saveTypingInfo } from ".";
 import { SaveTyping } from "../model/typing";
 
-const useSaveTypingInfo = () => {
+const useSaveTypingInfo = (token: string) => {
   return useMutation({
     mutationFn: (payload: SaveTyping["Request"]["body"]) =>
-      saveTypingInfo(payload),
+      saveTypingInfo(token, payload),
     onSuccess: () => {},
   });
 };

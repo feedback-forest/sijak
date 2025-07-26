@@ -2,11 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-import { ExternalLink } from "../ExternalLink";
 import { ExternalLinkList } from "./ExternalLinkList";
-import { ExternalLinkProps } from "../ExternalLink/ExternalLink";
 import { FooterSijakLogo } from "./FooterSijakLogo";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const Footer = () => {

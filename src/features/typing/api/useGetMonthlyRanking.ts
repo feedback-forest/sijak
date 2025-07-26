@@ -6,7 +6,7 @@ const useGetMonthlyRanking = () => {
   return useQuery({
     queryKey: TYPING_RANKING_KEYS.monthly(),
     queryFn: () => getMonthlyRanking(),
-    select: (response) => response,
+    select: (response) => response.data,
     meta: {
       errorMessage: "Failed to fetch Monthly Ranking",
     },
