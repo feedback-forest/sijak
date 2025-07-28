@@ -18,7 +18,7 @@ const FloatingBtnGroup = ({
   reset,
   download,
 }: FloatingBtnGroupProps) => {
-  const { phraseInfo, setPhraseInfo } = usePhraseStore();
+  const { phraseInfo, setPhraseIndex } = usePhraseStore();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -26,19 +26,20 @@ const FloatingBtnGroup = ({
 
   const handleRetry = () => {
     if (url === "result" && phraseInfo) {
-      setPhraseInfo(phraseInfo.phraseIndex, phraseInfo.phrase);
+      setPhraseIndex(phraseInfo.phraseIndex);
       router.push("/typing");
       return;
     }
     if (phraseInfo && reset) {
-      setPhraseInfo(phraseInfo.phraseIndex, phraseInfo.phrase);
+      setPhraseIndex(phraseInfo.phraseIndex);
       reset();
     }
   };
 
   const handleNext = () => {
     console.log(phraseInfo);
-    if (url === "result") {
+    if (url === "result" && phraseInfo) {
+      setPhraseIndex(phraseInfo.phraseIndex + 1);
       router.push("/typing");
       return;
     }
@@ -53,13 +54,14 @@ const FloatingBtnGroup = ({
       });
     }
 
-    if (phraseInfo && phraseInfo.phrase.length - 1 === phraseInfo.phraseIndex) {
-      window.location.reload();
-      return;
+    if (phraseInfo && phraseInfo.phrase.length - 1 > phraseInfo.phraseIndex) {
+      setPhraseIndex(phraseInfo.phraseIndex + 1);
     }
 
-    if (phraseInfo && phraseInfo.phrase.length > phraseInfo.phraseIndex) {
-      setPhraseInfo(phraseInfo.phraseIndex + 1, phraseInfo.phrase);
+    if (phraseInfo && phraseInfo.phrase.length - 1 === phraseInfo.phraseIndex) {
+      localStorage.removeItem("phraseInfo");
+      window.location.reload();
+      return;
     }
   };
 
@@ -111,24 +113,29 @@ const FloatingBtnGroup = ({
               iconHeight={24}
               buttonWidth={56}
               buttonHeight={56}
-              className={cn("border rounded-full", isResultPage && "bg-black")}
+              className={cn(
+                "border rounded-full",
+                isResultPage && "bg-black focus:bg-black",
+              )}
               handleClick={handleDownload}
             />
           )}
-          <IconButton
-            src={
-              isResultPage
-                ? "/icons/share_typing_white.svg"
-                : "/icons/share_typing.svg"
-            }
-            alt="share"
-            iconWidth={24}
-            iconHeight={24}
-            buttonWidth={56}
-            buttonHeight={56}
-            className={cn("border rounded-full", isResultPage && "bg-black")}
-            handleClick={shareLinkToURL}
-          />
+          {!isResultPage && (
+            <IconButton
+              src={
+                isResultPage
+                  ? "/icons/share_typing_white.svg"
+                  : "/icons/share_typing.svg"
+              }
+              alt="share"
+              iconWidth={24}
+              iconHeight={24}
+              buttonWidth={56}
+              buttonHeight={56}
+              className={cn("border rounded-full", isResultPage && "bg-black")}
+              handleClick={shareLinkToURL}
+            />
+          )}
         </div>
       </div>
     </div>

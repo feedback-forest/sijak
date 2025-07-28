@@ -60,7 +60,11 @@ export const TypeArea = React.forwardRef(function TypeAreaForward(
   const [typedValue, setTypedValue] = useState<string>("");
   const [isReadyToComplete, setIsReadyToComplete] = useState(false);
 
-  const { typing: typingInfo, setTypingInfo } = useTypingStore();
+  const {
+    typing: typingInfo,
+    setTypingInfo,
+    // resetTypingInfo,
+  } = useTypingStore();
   const { typingLoginedUser } = useTypingLoginedUserStore();
   const { setTypingResultInfo } = useTypingResultInfo();
   const { updateTotalRecord } = useTotalRecord();
@@ -130,6 +134,7 @@ export const TypeArea = React.forwardRef(function TypeAreaForward(
     };
 
     setTypingInfo(newTypingInfo);
+    router.push("/typing/result");
 
     onComplete?.();
   }, [
@@ -148,6 +153,13 @@ export const TypeArea = React.forwardRef(function TypeAreaForward(
     onComplete,
   ]);
 
+  useEffect(() => {
+    // text가 바뀌면 입력값도 초기화
+    // resetTypingInfo();
+    setTypedValue("");
+    setIsReadyToComplete(false);
+  }, [text]);
+
   //FIXME: 수정한 곳
   // useEffect(() => {
   //   setTypingPercent({
@@ -159,12 +171,13 @@ export const TypeArea = React.forwardRef(function TypeAreaForward(
     `cpm: ${characterPerMinute}, maxCPM: ${maxCPM}, wpm: ${wordsPerMinute}, acc: ${accuracy}, time: ${time}, percent: ${typedValue.length / phraseInfo?.sentence.length}`,
   );
 
-  console.log();
+  console.log(text);
 
   return (
     <>
       <div className="relative text-xl leading-[33px] sm:text-2xl md:text-3xl md:leading-normal h-full">
         <textarea
+          id={`typing-value-${phraseIndex}`}
           ref={(element) => {
             if (element) {
               innerRef.current = element;
@@ -213,8 +226,8 @@ export const TypeArea = React.forwardRef(function TypeAreaForward(
           }}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
+              event.preventDefault(); // 줄바꿈 방지
               complete();
-              router.push("/typing/result");
             }
           }}
           value={typedValue}

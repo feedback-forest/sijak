@@ -34,16 +34,18 @@ const TypingHome = () => {
     isLoading,
     isSuccess: isTypingListSuccess,
   } = useGetTypingList();
+
   const typingListData = typingList?.data.phrases;
   console.log("typingListData", typingListData);
 
-  const { phraseInfo, setPhraseInfo } = usePhraseStore();
+  const { phraseInfo, setPhrase } = usePhraseStore();
 
   const { typingPercent } = useTypingPercent();
+
   useEffect(() => {
-    if (typingListData && phraseInfo) {
+    if (typingListData && phraseInfo && typingListData.length > 0) {
       console.log("1234", typingListData);
-      setPhraseInfo(phraseInfo.phraseIndex, typingListData);
+      setPhrase(typingListData);
     }
   }, [typingListData]);
 
@@ -55,14 +57,12 @@ const TypingHome = () => {
     console.log("percent@@@@@@:", typingPercent?.percent);
   }, [typingPercent?.percent]);
 
-  // TODO: 다음 버튼 클릭 시 recoil 다음 문장 상태 가져오기
-
-  // TODO: 경계값 1번째 글, 마지막 글 alert
-
-  // TODO: 타이핑 문장 1개만 보이게 수정
-
-  if (!phraseInfo || !phraseInfo.phrase) {
-    return null;
+  if (isLoading || !phraseInfo || phraseInfo.phrase.length === 0) {
+    return (
+      <div className="flex w-full h-full min-h-[calc(100vh_-_68px)] justify-center items-center">
+        <ClipLoader color="#8D8D8D" size={24} />
+      </div>
+    );
   }
 
   return (

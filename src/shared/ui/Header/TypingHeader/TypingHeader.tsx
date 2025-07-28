@@ -52,7 +52,6 @@ const TypingHeader = () => {
   const isRenderLogin = () => {
     if (url === "signup") return false;
     if (typingLoginedUser && typingLoginedUser.accessToken) return false;
-    // TODO: 유저 전역 객체에 토큰이 있으면 유저 아이콘으로 변경
     return true;
   };
 
@@ -67,7 +66,16 @@ const TypingHeader = () => {
   const renderTitle = () => {
     if (url === "ranking") return "랭킹";
     if (url === "signup") return "회원정보 입력";
-    else if (url === undefined) return "write.type";
+    else if (url === undefined)
+      return (
+        <div
+          onClick={() => {
+            router.push("/typing");
+          }}
+        >
+          타자모어
+        </div>
+      );
     else return "";
   };
 
@@ -123,6 +131,7 @@ const TypingHeader = () => {
             </div>
           </div>
         )}
+        {!isRenderLogin() && !isRenderUserIcon() && <div className="w-6"></div>}
       </header>
     )
   );
