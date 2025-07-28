@@ -54,6 +54,7 @@ export const TypeArea = React.forwardRef(function TypeAreaForward(
     maxCPM,
     characterPerMinute,
     accuracy,
+    percent,
     time,
   } = useRecord();
 
@@ -67,6 +68,7 @@ export const TypeArea = React.forwardRef(function TypeAreaForward(
   } = useTypingStore();
   const { typingLoginedUser } = useTypingLoginedUserStore();
   const { setTypingResultInfo } = useTypingResultInfo();
+  const { setTypingPercent } = useTypingPercent();
   const { updateTotalRecord } = useTotalRecord();
   const saveTypingInfo = useSaveTypingInfo(
     typingLoginedUser?.accessToken ?? "",
@@ -97,6 +99,7 @@ export const TypeArea = React.forwardRef(function TypeAreaForward(
       characterPerMinute,
       maxCPM,
       wordsPerMinute,
+      percent,
     });
 
     saveTypingInfo.mutate(
@@ -110,7 +113,7 @@ export const TypeArea = React.forwardRef(function TypeAreaForward(
       },
       {
         onSuccess: (data) => {
-          console.log(data);
+          // console.log(data);
           setTypingResultInfo({
             nickname: data.data.data.typing.nickname,
             rank: data.data.data.typing.rank,
@@ -160,15 +163,13 @@ export const TypeArea = React.forwardRef(function TypeAreaForward(
     setIsReadyToComplete(false);
   }, [text]);
 
-  //FIXME: 수정한 곳
+  // FIXME: 수정한 곳
   // useEffect(() => {
-  //   setTypingPercent({
-  //     percent: typedValue.length / phraseInfo.sentence.length,
-  //   });
-  // }, [phraseInfo.sentence.length, setTypingPercent, typedValue]);
+  //   setTypingPercent(percent);
+  // }, [percent, setTypingPercent]);
 
   console.log(
-    `cpm: ${characterPerMinute}, maxCPM: ${maxCPM}, wpm: ${wordsPerMinute}, acc: ${accuracy}, time: ${time}, percent: ${typedValue.length / phraseInfo?.sentence.length}`,
+    `cpm: ${characterPerMinute}, maxCPM: ${maxCPM}, wpm: ${wordsPerMinute}, acc: ${accuracy}, time: ${time}, percent: ${percent}`,
   );
 
   console.log(text);

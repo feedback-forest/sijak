@@ -12,7 +12,7 @@ interface RankingInfoProps {
 const RankingInfo = ({ memberId, rank, nickname, score }: RankingInfoProps) => {
   const tempUserId = 4;
   const isUserInRanking = memberId === tempUserId;
-  console.log(memberId, rank, nickname);
+  // console.log(memberId, rank, nickname);
 
   return (
     <div>

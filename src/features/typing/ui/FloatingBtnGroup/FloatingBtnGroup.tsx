@@ -6,6 +6,7 @@ import { IconButton } from "@/shared/ui";
 import { toast } from "@/shared/hooks/useToast";
 import { usePathname, useRouter } from "next/navigation";
 import useGetTypingList from "../../api/useGetTypingList";
+import useTypingPercent from "@/shared/store/typingPercent";
 
 interface FloatingBtnGroupProps {
   isResultPage?: boolean;
@@ -19,6 +20,7 @@ const FloatingBtnGroup = ({
   download,
 }: FloatingBtnGroupProps) => {
   const { phraseInfo, setPhraseIndex } = usePhraseStore();
+  const { setTypingPercent } = useTypingPercent();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -27,17 +29,19 @@ const FloatingBtnGroup = ({
   const handleRetry = () => {
     if (url === "result" && phraseInfo) {
       setPhraseIndex(phraseInfo.phraseIndex);
+      setTypingPercent(0);
       router.push("/typing");
       return;
     }
     if (phraseInfo && reset) {
       setPhraseIndex(phraseInfo.phraseIndex);
+      setTypingPercent(0);
       reset();
     }
   };
 
   const handleNext = () => {
-    console.log(phraseInfo);
+    // console.log(phraseInfo);
     if (url === "result" && phraseInfo) {
       setPhraseIndex(phraseInfo.phraseIndex + 1);
       router.push("/typing");

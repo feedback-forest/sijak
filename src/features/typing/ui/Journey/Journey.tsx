@@ -22,7 +22,7 @@ export const Journey = ({
 }) => {
   const [step, setStep] = useState<Step>(Step.typing);
 
-  console.log("phrase", phrase);
+  // console.log("phrase", phrase);
 
   return (
     <>

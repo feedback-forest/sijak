@@ -22,7 +22,7 @@ const LoginCallback = () => {
 
   useEffect(() => {
     if (typingLoginedUser) {
-      console.log("성공");
+      // console.log("성공");
       router.push("/typing");
       toast({
         title: "로그인되었습니다.",

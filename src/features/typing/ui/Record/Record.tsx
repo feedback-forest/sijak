@@ -2,6 +2,7 @@ import { useOptions } from "@/features/provider/OptionsProvider";
 import { useTypingStatus } from "@/features/provider/TypingStatusProvider";
 import { formatToMs } from "@/shared/hooks/formatTimeToMs";
 import { isWritingKoreanLetter } from "@/shared/hooks/isWritingKoreanLetter";
+import useTypingPercent from "@/shared/store/typingPercent";
 import { ResolvedChar } from "@/shared/types/char";
 import clsx from "clsx";
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
@@ -12,6 +13,7 @@ const RecordContext = React.createContext<{
   maxCPM: number;
   time: string;
   accuracy: number;
+  percent: number;
   typedCharsCount: number;
   resolvedCharList: ResolvedChar[];
   updateRecord: (value: string) => void;
@@ -31,6 +33,7 @@ export const RecordProvider = ({
   const [maxCPM, setMaxCPM] = React.useState(0);
   const [characterPerMinute, setCharacterPerMinute] = React.useState(0);
   const [accuracy, setAccuracy] = React.useState(0);
+  const [percent, setPercent] = React.useState(0);
   const [time, setTime] = React.useState("00:00:00");
 
   const [currentWords, setCurrentWords] = React.useState<string[]>([]);
@@ -42,6 +45,8 @@ export const RecordProvider = ({
   const [isEnded, setIsEnded] = React.useState(false);
 
   const startedTimeRef = useRef<number | null>(null);
+
+  const { setTypingPercent } = useTypingPercent();
 
   const updateRecord = useCallback((value: string) => {
     const startedTime = (startedTimeRef.current =
@@ -60,7 +65,7 @@ export const RecordProvider = ({
     const newCharacterPerMinute = typedCharCount / (totalTime / 1000 / 60);
     setCharacterPerMinute(newCharacterPerMinute);
 
-    // TODO: maxCPM 계산 로직
+    // TODO: maxCPM 계산 로직 검토
     const newMaxCPM = Math.max(characterPerMinute, newCharacterPerMinute);
     setMaxCPM(newMaxCPM);
 
@@ -95,6 +100,10 @@ export const RecordProvider = ({
       newResolvedCharList.length;
     setAccuracy(newAccuracy);
 
+    const newPercent = (typedCharCount / newResolvedCharList.length) * 100;
+    setPercent(newPercent);
+    setTypingPercent(newPercent);
+
     if (targetValueList.length === value.length) {
       setIsEnded(true);
     }
@@ -126,6 +135,7 @@ export const RecordProvider = ({
     setCharacterPerMinute(0);
     setMaxCPM(0);
     setAccuracy(0);
+    setPercent(0);
     setCurrentWords([]);
     setResolvedCharList(
       target.split("").map((char) => ({ char, isCorrect: false })),
@@ -137,6 +147,7 @@ export const RecordProvider = ({
   const value = useMemo(
     () => ({
       accuracy,
+      percent,
       time,
       resetRecord,
       resolvedCharList,
@@ -148,6 +159,7 @@ export const RecordProvider = ({
     }),
     [
       accuracy,
+      percent,
       time,
       currentWords,
       resetRecord,
@@ -183,6 +195,7 @@ export const Record = ({ target }: { target: string }) => {
     maxCPM,
     accuracy,
     typedCharsCount,
+    percent,
   } = useRecord();
 
   const data = [
@@ -191,6 +204,7 @@ export const Record = ({ target }: { target: string }) => {
     maxCPM.toFixed(2),
     `${(accuracy * 100).toFixed(2)}%`,
     `${typedCharsCount}/${target.length}`,
+    percent.toFixed(2),
   ];
 
   return (

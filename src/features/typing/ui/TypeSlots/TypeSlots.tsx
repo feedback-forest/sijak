@@ -23,10 +23,10 @@ export const TypeSlots = ({ phrase, phraseIndex }: TypeSlotsProps) => {
     [],
   );
 
-  console.log(phrase);
+  // console.log(phrase);
 
   const currentSentence = phrase[phraseIndex]?.sentence ?? "";
-  console.log(currentSentence);
+  // console.log(currentSentence);
 
   return (
     <div className="flex content-center items-center px-8 transition-transform duration-700">

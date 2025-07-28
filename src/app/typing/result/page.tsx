@@ -9,6 +9,12 @@ import { toPng } from "html-to-image";
 // import { useTotalRecord } from "@/features/provider/TotalRecordProvider";
 import useTypingStore from "@/shared/store/typing";
 import useTypingResultInfo from "@/shared/store/typingResult";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/shared/ui/Accordion/Accordion";
 // import usePhraseStore from "@/shared/store/phrase";
 const ResultPage = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -82,24 +88,47 @@ const ResultPage = () => {
           </div>
           <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-[14px]">
-              {typingResultInfo ? (
-                <ResultInfo title="User" content={typingResultInfo.nickname} />
-              ) : (
-                <ResultInfo title="User" content={"GUEST"} />
-              )}
-              <Divider isDashed />
-              {/* TODO: 회원만 보여주고 비회원 blur 처리 로그인한 회원만 볼 수 있습니다. */}
-              {typingResultInfo &&
-              typingResultInfo.rank !== -1 &&
-              typingResultInfo.rank !== null ? (
-                <ResultInfo
-                  title="Rank"
-                  content={`${typingResultInfo.rank}위`}
-                />
-              ) : (
-                <ResultInfo title="Rank" content={``} />
-              )}
-              <Divider isDashed />
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="item-1">
+                  <AccordionTrigger className={"border-b border-dashed"}>
+                    {typingResultInfo ? (
+                      <ResultInfo
+                        title="User"
+                        content={typingResultInfo.nickname}
+                      />
+                    ) : (
+                      <ResultInfo title="User" content={"GUEST"} />
+                    )}
+                    <Divider isDashed />
+                  </AccordionTrigger>
+                  <AccordionContent className="flex flex-col justify-center h-full gap-4 text-balance">
+                    {/* TODO: 회원만 보여주고 비회원 blur 처리 로그인한 회원만 볼 수 있습니다. */}
+                    {typingResultInfo &&
+                    typingResultInfo.rank !== -1 &&
+                    typingResultInfo.rank !== null ? (
+                      <div className="gap-0">
+                        <ResultInfo
+                          title="Rank"
+                          content={`${typingResultInfo.rank}위`}
+                          containerClassName="py-4"
+                        />
+                        <Divider isDashed />
+                      </div>
+                    ) : (
+                      <div className="gap-0">
+                        <ResultInfo
+                          title="Rank"
+                          content={`O위`}
+                          containerClassName="py-4"
+                          contentClassName="blur-sm"
+                        />
+                        <Divider isDashed />
+                      </div>
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+
               <div className="flex flex-row w-full items-center gap-[60px]">
                 <ResultInfo
                   title="CPM"

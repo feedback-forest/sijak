@@ -11,6 +11,7 @@ import useGetTypingList from "@/features/typing/api/useGetTypingList";
 import FloatingBtnGroup from "@/features/typing/ui/FloatingBtnGroup/FloatingBtnGroup";
 import { Journey } from "@/features/typing/ui/Journey/Journey";
 import PostTitle from "@/features/typing/ui/PostTitle/PostTitle";
+import TypingProgressBar from "@/features/typing/ui/TypingProgressBar/TypingProgressBar";
 // import { isMacOS } from "@/shared/hooks/userAgent.server";
 import { getRandomPhrase } from "@/shared/hooks/words";
 import usePhraseStore from "@/shared/store/phrase";
@@ -25,9 +26,9 @@ const TypingHome = () => {
   // TODO: 유저 정보 확인 API
   const { typingLoginedUser } = useTypingLoginedUserStore();
 
-  useEffect(() => {
-    console.log("✅ 로그인 유저 상태:", typingLoginedUser);
-  }, [typingLoginedUser]);
+  // useEffect(() => {
+  //   console.log("✅ 로그인 유저 상태:", typingLoginedUser);
+  // }, [typingLoginedUser]);
 
   const {
     data: typingList,
@@ -36,26 +37,20 @@ const TypingHome = () => {
   } = useGetTypingList();
 
   const typingListData = typingList?.data.phrases;
-  console.log("typingListData", typingListData);
+  // console.log("typingListData", typingListData);
 
   const { phraseInfo, setPhrase } = usePhraseStore();
 
-  const { typingPercent } = useTypingPercent();
-
   useEffect(() => {
     if (typingListData && phraseInfo && typingListData.length > 0) {
-      console.log("1234", typingListData);
+      // console.log("1234", typingListData);
       setPhrase(typingListData);
     }
   }, [typingListData]);
 
-  useEffect(() => {
-    console.log(phraseInfo);
-  }, [phraseInfo]);
-
-  useEffect(() => {
-    console.log("percent@@@@@@:", typingPercent?.percent);
-  }, [typingPercent?.percent]);
+  // useEffect(() => {
+  //   console.log(phraseInfo);
+  // }, [phraseInfo]);
 
   if (isLoading || !phraseInfo || phraseInfo.phrase.length === 0) {
     return (
@@ -73,14 +68,7 @@ const TypingHome = () => {
             <OptionsProvider>
               <div className="flex h-full flex-col gap-5">
                 <div className="flex h-full flex-col gap-9">
-                  {typingPercent ? (
-                    <Progress
-                      value={typingPercent.percent}
-                      className="h-[1px]"
-                    />
-                  ) : (
-                    <Progress value={0} className="h-[1px]" />
-                  )}
+                  <TypingProgressBar />
                   {isLoading && (
                     <div className="flex w-full justify-center items-center">
                       <ClipLoader color="#8D8D8D" size={24} />

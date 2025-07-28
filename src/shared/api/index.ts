@@ -16,7 +16,7 @@ baseInstance.interceptors.response.use(
   (response) => {
     const token: string = response.headers["authorization"];
 
-    console.log("api, token", token);
+    // console.log("api, token", token);
 
     // if (token) {
     //   console.log("api, token!!", token.replace("Bearer ", ""));
@@ -29,7 +29,7 @@ baseInstance.interceptors.response.use(
     // }
 
     if (typeof window !== "undefined" && token) {
-      console.log("@@@@@@@@@@@@@@@@token저장@@@@@@@@@@@@@@");
+      // console.log("@@@@@@@@@@@@@@@@token저장@@@@@@@@@@@@@@");
 
       typingUserStore.getState().setTypingLoginedUser({
         accessToken: token.replace("Bearer ", ""),

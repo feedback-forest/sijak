@@ -287,7 +287,7 @@ const SignUpPage = () => {
     <div className="flex flex-col w-full desktop:h-[calc(100vh-70px)] tablet:h-[calc(100vh-70px)] mobile:h-[calc(100vh-48px)] justify-start items-center p-4 gap-8">
       <section className="flex desktop:w-[400px] tablet:w-[312px] mobile:w-full flex-col desktop:justify-center tablet:justify-center mobile:justify-start desktop:items-center tablet:items-center mobile:items-start gap-8">
         <div className="font-extrabold desktop:text-[40px] tablet:text-[28px] mobile:text-[24px]">
-          [서비스명]에서 사용할 <br /> 닉네임을 입력해주세요.
+          타자모어에서 사용할 <br /> 닉네임을 입력해주세요.
         </div>
         <div className="flex w-full flex-col desktop:justify-center tablet:justify-center mobile:justify-start desktop:items-center tablet:items-center mobile:items-start">
           <div className="flex desktop:text-lg tablet:text-sm mobile:text-sm font-medium">

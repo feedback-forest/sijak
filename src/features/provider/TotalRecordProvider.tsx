@@ -7,6 +7,7 @@ export type TotalRecord = {
   characterPerMinutes: number[];
   maxCPMs: number[];
   accuracies: number[];
+  percents: number[];
 };
 
 type RecordUpdateHandlerParameter = {
@@ -14,6 +15,7 @@ type RecordUpdateHandlerParameter = {
   characterPerMinute: number;
   maxCPM: number;
   accuracy: number;
+  percent: number;
 };
 
 const TotalRecordContext = React.createContext<
@@ -44,6 +46,7 @@ export const TotalRecordProvider = ({
     characterPerMinutes: [],
     maxCPMs: [],
     wordsPerMinutes: [],
+    percents: [],
   });
 
   const value = useMemo(
@@ -55,6 +58,7 @@ export const TotalRecordProvider = ({
           characterPerMinutes: [],
           maxCPMs: [],
           wordsPerMinutes: [],
+          percents: [],
         });
       },
       updateTotalRecord: ({
@@ -62,13 +66,21 @@ export const TotalRecordProvider = ({
         characterPerMinute,
         maxCPM,
         accuracy,
+        percent,
       }: RecordUpdateHandlerParameter) => {
         setData(
-          ({ accuracies, characterPerMinutes, maxCPMs, wordsPerMinutes }) => ({
+          ({
+            accuracies,
+            characterPerMinutes,
+            maxCPMs,
+            wordsPerMinutes,
+            percents,
+          }) => ({
             accuracies: [...accuracies, accuracy],
             characterPerMinutes: [...characterPerMinutes, characterPerMinute],
             maxCPMs: [...maxCPMs, maxCPM],
             wordsPerMinutes: [...wordsPerMinutes, wordsPerMinute],
+            percents: [...percents, percent],
           }),
         );
       },
