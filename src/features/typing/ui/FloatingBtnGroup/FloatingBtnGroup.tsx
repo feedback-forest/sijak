@@ -84,7 +84,7 @@ const FloatingBtnGroup = ({
   };
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-10">
+    <div className="fixed bottom-4 left-4 right-4 z-10 w-[375px]">
       <div className="flex flex-row w-full items-center justify-between">
         <div className="flex flex-row w-full gap-[2px]">
           <IconButton

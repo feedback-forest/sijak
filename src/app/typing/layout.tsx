@@ -10,13 +10,19 @@ const pretendard = localFont({
   variable: "--font-pretendard",
 });
 
+export const metadata = {
+  title: "타자모어",
+  description: "한결같이 굳건하게",
+  viewport: "width=device-width, initial-scale=1.0",
+};
+
 export default function TypingLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <>
+    <div className="flex items-center justify-center min-h-screen bg-white">
       <div
-        className={`${pretendard.className} flex flex-col w-full h-full  desktop:pt-[70px] tablet:pt-[70px] mobile:pt-5`}
+        className={`${pretendard.className} flex flex-col w-full desktop:pt-[70px] tablet:pt-[70px] mobile:pt-5 max-w-[375px] relative h-screen`}
       >
         <Providers>
           <main>{children}</main>
@@ -24,6 +30,6 @@ export default function TypingLayout({
           <ToastToaster />
         </Providers>
       </div>
-    </>
+    </div>
   );
 }

@@ -83,7 +83,7 @@ const TypingHeader = () => {
     isRenderHeader() && (
       <header
         className={cn(
-          "flex w-full justify-between items-center mobile:h-12 mobile:px-4",
+          "flex w-full justify-between items-center mobile:h-12 mobile:px-4 max-w-[375px]",
           isRenderMobileArrow() && "border-b-[0.5px] border-[#DCDEE2 ]",
         )}
       >
